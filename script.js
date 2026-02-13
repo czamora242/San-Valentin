@@ -21,9 +21,11 @@ document.getElementById('cena').addEventListener('click', function() {
     
     inputContainer.innerHTML = `
         <label for="lugar-cena">Elige el restaurante:</label>
-        <input type="text" id="lugar-cena" " />
+        <input type="text" id="lugar-cena" placeholder="Ej: La Trattoria, Casa Morales, etc." />
     `;
     
+    // Asegurar que solo se muestre este modal
+    confirmationModal.style.display = 'none';
     modal.style.display = 'block';
 });
 
@@ -35,9 +37,11 @@ document.getElementById('cine').addEventListener('click', function() {
     
     inputContainer.innerHTML = `
         <label for="pelicula">Elige tu película favorita:</label>
-        <input type="text" id="pelicula" />
+        <input type="text" id="pelicula" placeholder="Ej: Titanic, Notebook, La La Land, etc." />
     `;
     
+    // Asegurar que solo se muestre este modal
+    confirmationModal.style.display = 'none';
     modal.style.display = 'block';
 });
 
@@ -90,26 +94,32 @@ confirmBtn.addEventListener('click', function() {
     // Guardar en localStorage
     localStorage.setItem('planSanValentin', JSON.stringify(datosReserva));
     
-    // Mostrar en consola (puedes abrir la consola del navegador para ver los datos)
+    // Mostrar en consola
     console.log('═══════════════════════════════════════');
     console.log('PLAN DE SAN VALENTÍN GUARDADO:');
     console.log('═══════════════════════════════════════');
     console.log(datosReserva);
     console.log('═══════════════════════════════════════');
     
+    // Cerrar primer modal y abrir el de confirmación
     modal.style.display = 'none';
     confirmationModal.style.display = 'block';
 });
 
-// Cerrar modales
-closeBtn.addEventListener('click', function() {
-    modal.style.display = 'none';
-});
+// Cerrar modales con la X
+if (closeBtn) {
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+}
 
-closeConfirmationBtn.addEventListener('click', function() {
-    confirmationModal.style.display = 'none';
-});
+if (closeConfirmationBtn) {
+    closeConfirmationBtn.addEventListener('click', function() {
+        confirmationModal.style.display = 'none';
+    });
+}
 
+// Cerrar al hacer clic fuera del modal
 window.addEventListener('click', function(event) {
     if (event.target === modal) {
         modal.style.display = 'none';
@@ -119,7 +129,7 @@ window.addEventListener('click', function(event) {
     }
 });
 
-// Ver datos guardados (puedes llamar esta función desde la consola)
+// Ver datos guardados (llama esta función desde la consola del navegador)
 function verPlanGuardado() {
     const plan = localStorage.getItem('planSanValentin');
     if (plan) {
