@@ -81,8 +81,8 @@ button:hover {
 }
 
 .gallery img {
-    width: 300px;  /* Ancho fijo */
-    height: 300px;  /* Alto fijo para hacerlas cuadradas */
+    width: 100px;  /* Ancho fijo */
+    height: 100px;  /* Alto fijo para hacerlas cuadradas */
     object-fit: cover;  /* Recorta la imagen para que encaje sin deformarse */
     margin: 10px;
     border-radius: 10px;
