@@ -21,6 +21,7 @@ function iniciarApp() {
     cenaBtn.addEventListener('click', function() {
         console.log('Click en Cena Romántica');
         selectedOption = 'cena';
+        gallery.style.display = 'block';
         modalTitle.textContent = '🍷 ¡Cena Romántica! 🍷';
         modalMessage.textContent = '¡Perfecto! ¿Dónde te gustaría cenar?';
         
@@ -37,6 +38,7 @@ function iniciarApp() {
     cineBtn.addEventListener('click', function() {
         console.log('Click en Noche de Cine');
         selectedOption = 'cine';
+        gallery.style.display = 'block';
         modalTitle.textContent = '🎬 ¡Noche de Cine! 🎬';
         modalMessage.textContent = '¡Genial! ¿Qué película te gustaría ver?';
         
