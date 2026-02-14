@@ -44,25 +44,37 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
-    <!-- Configuración de Firebase -->
-    <script>
-        // REEMPLAZA ESTOS VALORES CON LOS DE TU PROYECTO FIREBASE
+    <!-- Firebase SDK con módulos ES6 -->
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        // Tu configuración de Firebase
         const firebaseConfig = {
-              apiKey: "AIzaSyAlgGKK66P7SpO20vSQmpx4WSaDsMgKrrw",
-              authDomain: "base-b5e59.firebaseapp.com",
-              projectId: "base-b5e59",
-              storageBucket: "base-b5e59.firebasestorage.app",
-              messagingSenderId: "181651691084",
-              appId: "1:181651691084:web:8f8e77b4f9cd96196d86e9",
+            apiKey: "AIzaSyAlgGKK66P7SpO20vSQmpx4WSaDsMgKrrw",
+            authDomain: "base-b5e59.firebaseapp.com",
+            projectId: "base-b5e59",
+            storageBucket: "base-b5e59.firebasestorage.app",
+            messagingSenderId: "181651691084",
+            appId: "1:181651691084:web:8f8e77b4f9cd96196d86e9",
+            measurementId: "G-3554175VJ0"
         };
-        
+
         // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Hacer disponibles las funciones globalmente
+        window.db = db;
+        window.collection = collection;
+        window.addDoc = addDoc;
+        window.serverTimestamp = serverTimestamp;
+        window.getDocs = getDocs;
+        window.orderBy = orderBy;
+        window.query = query;
+
+        console.log('✅ Firebase inicializado correctamente');
     </script>
     
     <script src="script.js"></script>
