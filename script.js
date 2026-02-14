@@ -48,13 +48,32 @@ document.getElementById('cine').addEventListener('click', function() {
 // Función para guardar en Firebase
 async function guardarEnFirebase(datosReserva) {
     try {
-        const docRef = await db.collection('planes_san_valentin').add(datosReserva);
-        console.log('✅ Documento guardado con ID:', docRef.id);
+        // Esperar a que Firebase esté listo
+        if (!window.db) {
+            console.error('⚠️ Firebase aún no está inicializado. Esperando...');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+
+        const docRef = await window.addDoc(window.collection(window.db, 'planes_san_valentin'), datosReserva);
+        
+        console.log('════════════════════════════════════════');
+        console.log('✅ ¡GUARDADO EXITOSO EN FIREBASE!');
+        console.log('════════════════════════════════════════');
+        console.log('📄 ID del documento:', docRef.id);
         console.log('📊 Datos guardados:', datosReserva);
+        console.log('════════════════════════════════════════');
+        
         return true;
     } catch (error) {
-        console.error('❌ Error al guardar en Firebase:', error);
-        alert('Hubo un error al guardar. Por favor intenta de nuevo.');
+        console.error('════════════════════════════════════════');
+        console.error('❌ ERROR AL GUARDAR EN FIREBASE');
+        console.error('════════════════════════════════════════');
+        console.error('Detalles del error:', error);
+        console.error('Código de error:', error.code);
+        console.error('Mensaje:', error.message);
+        console.error('════════════════════════════════════════');
+        
+        alert('Hubo un error al guardar. Verifica la consola para más detalles.');
         return false;
     }
 }
@@ -86,7 +105,7 @@ confirmBtn.addEventListener('click', async function() {
             tipo: 'Cena Romántica',
             lugar: lugar,
             fecha: fechaFormateada,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            timestamp: window.serverTimestamp(),
             mensaje: 'Será una velada mágica con velas, tu comida favorita y mucho amor.'
         };
         
@@ -103,21 +122,25 @@ confirmBtn.addEventListener('click', async function() {
             tipo: 'Noche de Cine',
             pelicula: pelicula,
             fecha: fechaFormateada,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            timestamp: window.serverTimestamp(),
             mensaje: 'Una noche perfecta acurrucados juntos con palomitas, mantas y mucho amor.'
         };
     }
     
+    // Mostrar indicador de carga
+    confirmBtn.textContent = 'Guardando... ⏳';
+    confirmBtn.disabled = true;
+    
     // Guardar en Firebase
     const guardado = await guardarEnFirebase(datosReserva);
+    
+    // Restaurar botón
+    confirmBtn.textContent = 'Confirmar ❤️';
+    confirmBtn.disabled = false;
     
     if (guardado) {
         // También guardar localmente como respaldo
         localStorage.setItem('planSanValentin', JSON.stringify(datosReserva));
-        
-        console.log('═══════════════════════════════════════');
-        console.log('💕 PLAN DE SAN VALENTÍN GUARDADO 💕');
-        console.log('═══════════════════════════════════════');
         
         // Cerrar primer modal y abrir el de confirmación
         modal.style.display = 'none';
@@ -148,20 +171,30 @@ window.addEventListener('click', function(event) {
     }
 });
 
-// Función para ver todos los planes guardados (ejecuta en la consola)
+// Función para ver todos los planes guardados (ejecuta en la consola del navegador)
 async function verTodosLosPlanesGuardados() {
     try {
-        const snapshot = await db.collection('planes_san_valentin').orderBy('timestamp', 'desc').get();
-        console.log('═══════════════════════════════════════');
-        console.log(`📋 TOTAL DE PLANES GUARDADOS: ${snapshot.size}`);
-        console.log('═══════════════════════════════════════');
+        const q = window.query(window.collection(window.db, 'planes_san_valentin'), window.orderBy('timestamp', 'desc'));
+        const querySnapshot = await window.getDocs(q);
         
-        snapshot.forEach((doc) => {
-            console.log(`ID: ${doc.id}`);
-            console.log(doc.data());
+        console.log('════════════════════════════════════════');
+        console.log(`📋 TOTAL DE PLANES GUARDADOS: ${querySnapshot.size}`);
+        console.log('════════════════════════════════════════');
+        
+        querySnapshot.forEach((doc) => {
+            console.log(`\n🆔 ID: ${doc.id}`);
+            console.log('📄 Datos:', doc.data());
             console.log('---');
         });
+        
+        console.log('════════════════════════════════════════');
     } catch (error) {
-        console.error('Error al leer los planes:', error);
+        console.error('❌ Error al leer los planes:', error);
     }
 }
+
+// Hacer la función disponible globalmente
+window.verTodosLosPlanesGuardados = verTodosLosPlanesGuardados;
+
+console.log('💡 Para ver todos los planes guardados, escribe en la consola:');
+console.log('   verTodosLosPlanesGuardados()');
