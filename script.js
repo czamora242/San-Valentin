@@ -17,12 +17,6 @@ function iniciarApp() {
 
     console.log('✅ App iniciada correctamente');
 
-    // ⭐ MOSTRAR LA GALERÍA AL CARGAR
-    if (gallery) {
-        gallery.style.display = 'grid';
-        console.log('✅ Galería mostrada');
-    }
-
     // Botón Cena Romántica
     cenaBtn.addEventListener('click', function() {
         console.log('Click en Cena Romántica');
