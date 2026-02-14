@@ -94,8 +94,6 @@ button:hover {
     transform: scale(1.05);
 }
 
-/* Agrega estos estilos al final de tu archivo CSS existente */
-
 .modal {
     display: none;
     position: fixed;
@@ -154,8 +152,7 @@ button:hover {
     margin: 25px 0;
 }
 
-#input-container input,
-#input-container select {
+#input-container input {
     width: 90%;
     padding: 15px;
     font-size: 1.1em;
@@ -205,5 +202,24 @@ button:hover {
     to {
         transform: translateY(0);
         opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    .options {
+        flex-direction: column;
+    }
+    
+    .gallery {
+        grid-template-columns: 1fr;
     }
 }
