@@ -183,8 +183,8 @@ button:nth-child(3) { animation-delay: 0.3s; }
 }
 
 @keyframes fadeInGallery {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0);
+    from { opacity: 0; transform: translateY(30px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .gallery img {
@@ -201,25 +201,6 @@ button:nth-child(3) { animation-delay: 0.3s; }
     transform: scale(1.05);
 }
 
-
-@keyframes zoomIn {
-    from {
-        opacity: 0;
-        transform: scale(0);
-        rotate: -180deg;
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-        rotate: 0deg;
-    }
-}
-
-.gallery img:hover {
-    transform: scale(1.15) rotate(5deg);
-    box-shadow: 0 10px 30px rgba(233, 30, 99, 0.4);
-    z-index: 10;
-}
 
 .modal {
     display: none;
