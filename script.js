@@ -13,6 +13,7 @@ const closeConfirmationBtn = document.querySelector('.close-confirmation');
 
 let selectedOption = '';
 
+// Botón Cena Romántica
 document.getElementById('cena').addEventListener('click', function() {
     selectedOption = 'cena';
     gallery.style.display = 'block';
@@ -24,11 +25,11 @@ document.getElementById('cena').addEventListener('click', function() {
         <input type="text" id="lugar-cena" placeholder="Ej: La Trattoria, Casa Morales, etc." />
     `;
     
-    // Asegurar que solo se muestre este modal
     confirmationModal.style.display = 'none';
     modal.style.display = 'block';
 });
 
+// Botón Noche de Cine
 document.getElementById('cine').addEventListener('click', function() {
     selectedOption = 'cine';
     gallery.style.display = 'block';
@@ -40,12 +41,26 @@ document.getElementById('cine').addEventListener('click', function() {
         <input type="text" id="pelicula" placeholder="Ej: Titanic, Notebook, La La Land, etc." />
     `;
     
-    // Asegurar que solo se muestre este modal
     confirmationModal.style.display = 'none';
     modal.style.display = 'block';
 });
 
-confirmBtn.addEventListener('click', function() {
+// Función para guardar en Firebase
+async function guardarEnFirebase(datosReserva) {
+    try {
+        const docRef = await db.collection('planes_san_valentin').add(datosReserva);
+        console.log('✅ Documento guardado con ID:', docRef.id);
+        console.log('📊 Datos guardados:', datosReserva);
+        return true;
+    } catch (error) {
+        console.error('❌ Error al guardar en Firebase:', error);
+        alert('Hubo un error al guardar. Por favor intenta de nuevo.');
+        return false;
+    }
+}
+
+// Confirmar selección
+confirmBtn.addEventListener('click', async function() {
     const fecha = new Date();
     const fechaFormateada = fecha.toLocaleDateString('es-ES', { 
         weekday: 'long', 
@@ -71,6 +86,7 @@ confirmBtn.addEventListener('click', function() {
             tipo: 'Cena Romántica',
             lugar: lugar,
             fecha: fechaFormateada,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             mensaje: 'Será una velada mágica con velas, tu comida favorita y mucho amor.'
         };
         
@@ -87,23 +103,26 @@ confirmBtn.addEventListener('click', function() {
             tipo: 'Noche de Cine',
             pelicula: pelicula,
             fecha: fechaFormateada,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             mensaje: 'Una noche perfecta acurrucados juntos con palomitas, mantas y mucho amor.'
         };
     }
     
-    // Guardar en localStorage
-    localStorage.setItem('planSanValentin', JSON.stringify(datosReserva));
+    // Guardar en Firebase
+    const guardado = await guardarEnFirebase(datosReserva);
     
-    // Mostrar en consola
-    console.log('═══════════════════════════════════════');
-    console.log('PLAN DE SAN VALENTÍN GUARDADO:');
-    console.log('═══════════════════════════════════════');
-    console.log(datosReserva);
-    console.log('═══════════════════════════════════════');
-    
-    // Cerrar primer modal y abrir el de confirmación
-    modal.style.display = 'none';
-    confirmationModal.style.display = 'block';
+    if (guardado) {
+        // También guardar localmente como respaldo
+        localStorage.setItem('planSanValentin', JSON.stringify(datosReserva));
+        
+        console.log('═══════════════════════════════════════');
+        console.log('💕 PLAN DE SAN VALENTÍN GUARDADO 💕');
+        console.log('═══════════════════════════════════════');
+        
+        // Cerrar primer modal y abrir el de confirmación
+        modal.style.display = 'none';
+        confirmationModal.style.display = 'block';
+    }
 });
 
 // Cerrar modales con la X
@@ -129,14 +148,20 @@ window.addEventListener('click', function(event) {
     }
 });
 
-// Ver datos guardados (llama esta función desde la consola del navegador)
-function verPlanGuardado() {
-    const plan = localStorage.getItem('planSanValentin');
-    if (plan) {
-        console.log('Plan guardado:', JSON.parse(plan));
-        return JSON.parse(plan);
-    } else {
-        console.log('No hay plan guardado aún');
-        return null;
+// Función para ver todos los planes guardados (ejecuta en la consola)
+async function verTodosLosPlanesGuardados() {
+    try {
+        const snapshot = await db.collection('planes_san_valentin').orderBy('timestamp', 'desc').get();
+        console.log('═══════════════════════════════════════');
+        console.log(`📋 TOTAL DE PLANES GUARDADOS: ${snapshot.size}`);
+        console.log('═══════════════════════════════════════');
+        
+        snapshot.forEach((doc) => {
+            console.log(`ID: ${doc.id}`);
+            console.log(doc.data());
+            console.log('---');
+        });
+    } catch (error) {
+        console.error('Error al leer los planes:', error);
     }
 }
