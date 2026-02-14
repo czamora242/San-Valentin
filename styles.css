@@ -180,13 +180,11 @@ button:nth-child(3) { animation-delay: 0.3s; }
     display: none;
     margin-top: 30px;
     animation: fadeInGallery 1s ease-in;
-    position: relative;
-    z-index: 1;
 }
 
 @keyframes fadeInGallery {
-    from { opacity: 0; transform: translateY(30px) scale(0.9); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0);
 }
 
 .gallery img {
@@ -194,12 +192,9 @@ button:nth-child(3) { animation-delay: 0.3s; }
     height: 100px;
     margin: 10px;
     object-fit: cover;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    animation: zoomIn 0.5s ease-out;
-    animation-fill-mode: both;
-    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease; 
 }
 
 
