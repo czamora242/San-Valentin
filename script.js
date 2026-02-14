@@ -27,7 +27,7 @@ function iniciarApp() {
         
         inputContainer.innerHTML = `
             <label for="lugar-cena">Elige el restaurante:</label>
-            <input type="text" id="lugar-cena" placeholder="Ej: La Trattoria, Casa Morales, etc." />
+            <input type="text" id="lugar-cena" />
         `;
         
         confirmationModal.style.display = 'none';
@@ -44,7 +44,7 @@ function iniciarApp() {
         
         inputContainer.innerHTML = `
             <label for="pelicula">Elige tu película favorita:</label>
-            <input type="text" id="pelicula" placeholder="Ej: Titanic, Notebook, La La Land, etc." />
+            <input type="text" id="pelicula" />
         `;
         
         confirmationModal.style.display = 'none';
